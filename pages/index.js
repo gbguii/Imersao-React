@@ -38,7 +38,7 @@ function Titulo(props){
 
 export default function PaginaInicial() {
     //const username = 'gbguii';
-    const [username, setUsername]= React.useState("gbguii");
+    const [username, setUsername]= React.useState("");
     const roteamento = useRouter();
     return (
       <>
@@ -91,7 +91,7 @@ export default function PaginaInicial() {
                   // onde esta o valor?
                   const valor = event.target.value;
                   // trocar o valor da variável.
-                  setUsername(valor);
+                  setUsername(valor)
                 }}
                 textFieldColors={{
                   neutral: {
