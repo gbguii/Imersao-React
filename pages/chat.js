@@ -3,25 +3,37 @@ import React from 'react';
 import appConfig from '../config.json';
 
 export default function ChatPage() {
-    const [mensagem, setMensagem] = React.useState(" ");
+    const [mensagem, setMensagem] = React.useState("");
     const [listaMensagem, setListaMensagem] = React.useState([]);
     // Sua lógica vai aqui
 
     // ./Sua lógica vai aqui
 
     function handleNovaMensagem(novaMensagem) {
-        const mensagem = {
-            id: listaMensagem.length + 1,
-            de: "gbguii",
-            texto: novaMensagem
-        }
-        setListaMensagem([
-            mensagem,
-            ...listaMensagem
-        ])
-        setMensagem("")
+        if(novaMensagem != ""){
+            const mensagem = {
+                id: listaMensagem.length + 1,
+                de: "gbguii",
+                texto: novaMensagem
+            }
+            setListaMensagem([
+                mensagem,
+                ...listaMensagem
+            ])
+            setMensagem("")
+        }else{return;}
+        
     }
-
+    function sendMensagem(event){
+        if (event.key == "Enter") {
+            event.preventDefault();
+            handleNovaMensagem(mensagem);
+        }
+        if(event.type == "click"){
+            event.preventDefault();
+            handleNovaMensagem(mensagem);
+        }
+    }
     return (
         <Box
             styleSheet={{
@@ -66,6 +78,7 @@ export default function ChatPage() {
                         styleSheet={{
                             display: 'flex',
                             alignItems: 'center',
+                            justifyContent: "center",
                         }}
                     >
                         <TextField
@@ -75,11 +88,9 @@ export default function ChatPage() {
                                 setMensagem(valor);
                             }}
                             onKeyPress={(event) => {
-                                if (event.key == "Enter") {
-                                    event.preventDefault();
-                                    handleNovaMensagem(mensagem);
-                                }
+                                sendMensagem(event)
                             }}
+                            
                             placeholder="Insira sua mensagem aqui..."
                             type="textarea"
                             styleSheet={{
@@ -93,6 +104,20 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+                        <button
+                        onClick={(event) => {
+                            sendMensagem(event)
+                        }}
+                        >Enviar</button>
+                        <style jsx>{`
+                            button{
+                                padding: 5px 20px;
+                                margin: auto;
+                                background-color: #181F25;
+                                color: #CBD2D9;
+                                border-radius: 5px;
+                            }
+                        `}</style>
                     </Box>
                 </Box>
             </Box>
