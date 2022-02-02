@@ -1,17 +1,35 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
-import React from 'react';
+import React, { useState } from 'react';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js'
+import {useRouter} from 'next/router'
+import { ButtonSendSticker } from '../src/componentes/Stickers'
+
 
 const SUPABASE_ANOW_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzU3MTM0NSwiZXhwIjoxOTU5MTQ3MzQ1fQ.4klodTmgeMgNbINWuRhaTnuPzLHD46yhVZRLnnV4MMI";
 const SUPABASE_URL = "https://omdykuwqalsxwiipwkhe.supabase.co";
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANOW_KEY)
-
                                 
 
 export default function ChatPage() {
+    const roteamento = useRouter();
+    const usuarioLogado = roteamento.query.username;
+    console.log(usuarioLogado);
+    console.log(roteamento.query);
     const [mensagem, setMensagem] = React.useState("");
-    const [listaMensagem, setListaMensagem] = React.useState([]);
+    const [listaMensagem, setListaMensagem] = React.useState([
+        {
+            id:1,
+            de: "gbguii",
+            texto: ":sticker: https://c.tenor.com/VylWt5lyjBoAAAAC/omg-yes.gif",
+
+        },
+        {
+            id:2,
+            de: "gbguii",
+            texto: "que triste",
+        }
+    ]);
     // Sua lógica vai aqui
 
     // ./Sua lógica vai aqui
@@ -22,7 +40,8 @@ export default function ChatPage() {
         .order('id', {ascending: false})
         .then(({data}) => {
             console.log(data)
-            setListaMensagem(data)});
+            //setListaMensagem(data)
+        });
     }, [])
 
 
@@ -93,8 +112,7 @@ export default function ChatPage() {
                         padding: '16px',
                     }}
                 >
-
-                    <MessageList mensagem={listaMensagem} />
+                    <MessageList mensagem={listaMensagem}/>
                     <Box
                         as="form"
                         styleSheet={{
@@ -133,13 +151,15 @@ export default function ChatPage() {
                         >Enviar</button>
                         <style jsx>{`
                             button{
-                                padding: 5px 20px;
+                                padding: 5px 10px;
                                 margin: auto;
+                                margin-right: 10px;
                                 background-color: #181F25;
                                 color: #CBD2D9;
                                 border-radius: 5px;
                             }
                         `}</style>
+                        <ButtonSendSticker/>
                     </Box>
                 </Box>
             </Box>
@@ -223,7 +243,14 @@ function MessageList(props) {
                                 {(new Date().toLocaleDateString())}
                             </Text>
                         </Box>
-                        {mensagem.texto}
+                        {mensagem.texto.startsWith(":sticker:")
+                        ?(
+                            <Image src={mensagem.texto.replace(":sticker", "")} />
+                        )
+                        :(
+                            mensagem.texto
+                        )
+                        }
                     </Text>
                 );
             })}
